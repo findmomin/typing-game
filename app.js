@@ -1,5 +1,5 @@
-"use strict";
-const elements = {
+// dom elements
+var elements = {
     word: document.getElementById('word'),
     text: document.getElementById('text'),
     scoreEl: document.getElementById('score'),
@@ -9,9 +9,10 @@ const elements = {
     settings: document.getElementById('settings'),
     difficultySelect: document.getElementById('difficulty'),
     reloadBtn: document.querySelector('.reload'),
-    finalScore: document.querySelector('.final-score'),
+    finalScore: document.querySelector('.final-score')
 };
-const words = [
+// List of words for game
+var words = [
     'sigh',
     'tense',
     'airplane',
@@ -33,32 +34,42 @@ const words = [
     'drag',
     'loving',
 ];
-let randomWord;
-let score = 0;
-let time = 10;
-let timer;
-let difficulty = 'medium';
-const startGame = () => {
+// Init word
+var randomWord;
+// Init score
+var score = 0;
+// Init time
+var time = 10;
+// timer
+var timer;
+// Set difficulty to value in ls or medium
+var difficulty = 'medium';
+// functions
+var startGame = function () {
+    // reseting the UI
     elements.endgameEl.classList.remove('display');
-    elements.timeEl.textContent = `10s`;
+    elements.timeEl.textContent = "10s";
     elements.scoreEl.textContent = '0';
+    // assign a random word
     randomWord = words[Math.floor(Math.random() * words.length)];
     elements.word.textContent = randomWord;
+    // reset all scores
     score = 0;
     time = 10;
     elements.text.focus();
-    timer = setInterval(() => {
+    // start the timer
+    timer = setInterval(function () {
         if (time <= 0)
             return lostGame();
         time--;
-        elements.timeEl.textContent = `${time}s`;
+        elements.timeEl.textContent = time + "s";
     }, 1000);
 };
-const checkWord = () => {
+var checkWord = function () {
     if (elements.text.value === randomWord)
         increaseScore();
 };
-const increaseScore = () => {
+var increaseScore = function () {
     if (difficulty === 'easy')
         time += 5;
     if (difficulty === 'medium')
@@ -69,21 +80,25 @@ const increaseScore = () => {
     elements.text.value = '';
     randomWord = words[Math.floor(Math.random() * words.length)];
     elements.word.textContent = randomWord;
-    elements.scoreEl.textContent = `${score}`;
+    elements.scoreEl.textContent = "" + score;
 };
-const lostGame = () => {
+var lostGame = function () {
     clearInterval(timer);
     elements.endgameEl.classList.add('display');
-    elements.finalScore.textContent = `Your final score is ${score}`;
+    elements.finalScore.textContent = "Your final score is " + score;
 };
-const changeDifficulty = () => {
+var changeDifficulty = function () {
     difficulty = elements.difficultySelect.value;
 };
-const toggleSettings = () => {
+var toggleSettings = function () {
     elements.settings.classList.toggle('hide');
 };
 startGame();
+// event listeners
 elements.text.addEventListener('input', checkWord);
+// restart game
 elements.reloadBtn.addEventListener('click', startGame);
+// game hardness
 elements.difficultySelect.addEventListener('change', changeDifficulty);
+// settings
 elements.settingsBtn.addEventListener('click', toggleSettings);
